@@ -28,8 +28,7 @@
   ],
   "preview": true,
   "activationEvents": [
-    "onCommand:hypersnips.helloWorld",
-    "*"
+    "onStartupFinished"
   ],
   "contributes": {
     "configuration": [
