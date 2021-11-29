@@ -15,11 +15,11 @@ export function getSnippetDir(): string {
   console.log(vscode);
 
   if (platform === 'win32') {
-    return path.join(APPDATA, 'Code/User/hsnips');
+    return path.join(APPDATA, 'Code - Insiders/User/hsnips');
   } else if (platform === 'darwin') {
-    return path.join(HOME, 'Library/Application Support/Code/User/hsnips');
+    return path.join(HOME, 'Library/Application Support/Code - Insiders/User/hsnips');
   } else {
-    return path.join(HOME, '.config/Code/User/hsnips');
+    return path.join(HOME, '.config/Code - Insiders/User/hsnips');
   }
 }
 
