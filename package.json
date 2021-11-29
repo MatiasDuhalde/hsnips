@@ -3,7 +3,7 @@
   "displayName": "HyperSnips",
   "description": "Snippet engine for VSCode inspired by Vim's UltiSnips",
   "icon": "images/hypersnips.png",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "publisher": "draivin",
   "license": "MIT",
   "repository": {
@@ -110,10 +110,13 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.10",
     "@types/vscode": "^1.62.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "@vscode/test-electron": "^1.6.2",
     "eslint": "^8.1.0",
     "typescript": "^4.4.4"
   },

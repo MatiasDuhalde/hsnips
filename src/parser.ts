@@ -4,12 +4,16 @@ const CODE_DELIMITER = '``';
 const HEADER_REGEXP = /^snippet ?(?:`([^`]+)`|(\S+))?(?: "([^"]+)")?(?: ([AMiwb]*))?/;
 
 function parseSnippetHeader(header: string): IHSnippetHeader {
-  let match = HEADER_REGEXP.exec(header);
-  if (!match) throw new Error('Invalid snippet header');
+  const match = HEADER_REGEXP.exec(header);
+  if (!match) {
+    throw new Error('Invalid snippet header');
+  }
 
   let trigger: string | RegExp = match[2];
   if (match[1]) {
-    if (!match[1].endsWith('$')) match[1] += '$';
+    if (!match[1].endsWith('$')) {
+      match[1] += '$';
+    }
     trigger = new RegExp(match[1], 'm');
   }
 
@@ -44,24 +48,24 @@ function countPlaceholders(string: string) {
 }
 
 function parseSnippet(headerLine: string, lines: string[]): IHSnippetInfo {
-  let header = parseSnippetHeader(headerLine);
+  const header = parseSnippetHeader(headerLine);
 
-  let script = [`(t, m, w, path) => {`];
+  const script = [`(t, m, w, path) => {`];
   script.push(`let rv = "";`);
-  script.push(`let _result = [];`);
-  script.push(`let _blockResults = [];`);
+  script.push(`const _result = [];`);
+  script.push(`const _blockResults = [];`);
 
   let isCode = false;
   let placeholders = 0;
 
   while (lines.length > 0) {
-    let line = lines.shift() as string;
+    const line = lines.shift() as string;
 
     if (isCode) {
       if (!line.includes(CODE_DELIMITER)) {
         script.push(line.trim());
       } else {
-        let [code, ...rest] = line.split(CODE_DELIMITER);
+        const [code, ...rest] = line.split(CODE_DELIMITER);
         script.push(code.trim());
         lines.unshift(rest.join(CODE_DELIMITER));
         script.push(`_result.push({block: _blockResults.length});`);
@@ -75,8 +79,8 @@ function parseSnippet(headerLine: string, lines: string[]): IHSnippetInfo {
         script.push(`_result.push("${escapeString(line)}");`);
         script.push(`_result.push("\\n");`);
         placeholders += countPlaceholders(line);
-      } else if (isCode == false) {
-        let [text, ...rest] = line.split(CODE_DELIMITER);
+      } else if (isCode === false) {
+        const [text, ...rest] = line.split(CODE_DELIMITER);
         script.push(`_result.push("${escapeString(text)}");`);
         script.push(`rv = "";`);
         placeholders += countPlaceholders(text);
@@ -98,16 +102,16 @@ function parseSnippet(headerLine: string, lines: string[]): IHSnippetInfo {
 // transformed into a local function inside this and the list of all snippet functions is returned
 // so we can build the approppriate HSnippet objects.
 export function parse(content: string): HSnippet[] {
-  let lines = content.split(/\r?\n/);
+  const lines = content.split(/\r?\n/);
 
-  let snippetInfos = [];
-  let script = [];
+  const snippetInfos = [];
+  const script = [];
   let isCode = false;
   let priority = 0;
   let context = undefined;
 
   while (lines.length > 0) {
-    let line = lines.shift() as string;
+    const line = lines.shift() as string;
 
     if (isCode) {
       if (line.startsWith('endglobal')) {
@@ -124,7 +128,7 @@ export function parse(content: string): HSnippet[] {
     } else if (line.startsWith('context ')) {
       context = line.substring('context '.length).trim() || undefined;
     } else if (line.match(HEADER_REGEXP)) {
-      let info = parseSnippet(line, lines);
+      const info = parseSnippet(line, lines);
       info.header.priority = priority;
       info.contextFilter = context;
       snippetInfos.push(info);
@@ -135,7 +139,7 @@ export function parse(content: string): HSnippet[] {
   }
 
   script.push(`return [`);
-  for (let snippet of snippetInfos) {
+  for (const snippet of snippetInfos) {
     script.push('{');
     if (snippet.contextFilter) {
       script.push(`contextFilter: (context) => (${snippet.contextFilter}),`);
@@ -147,14 +151,14 @@ export function parse(content: string): HSnippet[] {
 
   // for some reason, `require` is not defined inside the snippet code blocks,
   // so we're going to bind the it onto the function
-  let generators = new Function('require', script.join('\n'))(require) as IHSnippetParseResult[];
+  const generators = new Function('require', script.join('\n'))(require) as IHSnippetParseResult[];
   return snippetInfos.map(
     (s, i) =>
       new HSnippet(
         s.header,
         generators[i].generatorFunction,
         s.placeholders,
-        generators[i].contextFilter
-      )
+        generators[i].contextFilter,
+      ),
   );
 }

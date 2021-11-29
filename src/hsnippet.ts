@@ -3,7 +3,7 @@ export type GeneratorFunction = (
   texts: string[],
   matchGroups: string[],
   workspaceUri: string,
-  fileUri: string
+  fileUri: string,
 ) => GeneratorResult;
 
 export interface ContextInfo {
@@ -25,15 +25,15 @@ export class HSnippet {
   // UltiSnips-like options.
   automatic = false;
   multiline = false;
-  inword = false;
-  wordboundary = false;
-  beginningofline = false;
+  inWord = false;
+  wordBoundary = false;
+  beginningOfLine = false;
 
   constructor(
     header: IHSnippetHeader,
     generator: GeneratorFunction,
     placeholders: number,
-    contextFilter?: ContextFilter
+    contextFilter?: ContextFilter,
   ) {
     this.description = header.description;
     this.generator = generator;
@@ -48,11 +48,21 @@ export class HSnippet {
       this.trigger = header.trigger;
     }
 
-    if (header.flags.includes('A')) this.automatic = true;
-    if (header.flags.includes('M')) this.multiline = true;
-    if (header.flags.includes('i')) this.inword = true;
-    if (header.flags.includes('w')) this.wordboundary = true;
-    if (header.flags.includes('b')) this.beginningofline = true;
+    if (header.flags.includes('A')) {
+      this.automatic = true;
+    }
+    if (header.flags.includes('M')) {
+      this.multiline = true;
+    }
+    if (header.flags.includes('i')) {
+      this.inWord = true;
+    }
+    if (header.flags.includes('w')) {
+      this.wordBoundary = true;
+    }
+    if (header.flags.includes('b')) {
+      this.beginningOfLine = true;
+    }
   }
 }
 
