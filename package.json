@@ -1,122 +1,126 @@
 {
-    "name": "hsnips",
-    "displayName": "HyperSnips",
-    "icon": "images/hypersnips.png",
-    "version": "0.2.2",
-    "publisher": "draivin",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/draivin/hsnips"
-    },
-    "bugs": {
-        "url": "https://github.com/draivin/hsnips/issues"
-    },
-    "engines": {
-        "vscode": "^1.52.0"
-    },
-    "categories": [
-        "Snippets",
-        "Other"
+  "name": "hsnips",
+  "displayName": "HyperSnips",
+  "description": "Snippet engine for VSCode inspired by Vim's UltiSnips",
+  "icon": "images/hypersnips.png",
+  "version": "0.2.2",
+  "publisher": "draivin",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/draivin/hsnips"
+  },
+  "bugs": {
+    "url": "https://github.com/draivin/hsnips/issues"
+  },
+  "engines": {
+    "vscode": "^1.62.0"
+  },
+  "categories": [
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ultisnips",
+    "programmable snippets",
+    "dynamic snippets",
+    "snippets"
+  ],
+  "preview": true,
+  "activationEvents": [
+    "onCommand:hypersnips.helloWorld",
+    "*"
+  ],
+  "contributes": {
+    "configuration": [
+      {
+        "title": "HyperSnips",
+        "properties": {
+          "hsnips.multiLineContext": {
+            "type": "number",
+            "default": 20,
+            "description": "Number of lines matched when using multi-line regex mode."
+          }
+        }
+      }
     ],
-    "keywords": [
-        "ultisnips",
-        "programmable snippets",
-        "dynamic snippets",
-        "snippets"
+    "commands": [
+      {
+        "category": "HyperSnips",
+        "command": "hsnips.openSnippetsDir",
+        "title": "Open Snippets Directory"
+      },
+      {
+        "category": "HyperSnips",
+        "command": "hsnips.openSnippetFile",
+        "title": "Open Snippet File"
+      },
+      {
+        "category": "HyperSnips",
+        "command": "hsnips.reloadSnippets",
+        "title": "Reload Snippets"
+      }
     ],
-    "preview": true,
-    "activationEvents": [
-        "*"
+    "keybindings": [
+      {
+        "key": "tab",
+        "command": "hsnips.nextPlaceholder",
+        "when": "editorTextFocus && hasNextTabstop && inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "key": "shift+tab",
+        "command": "hsnips.prevPlaceholder",
+        "when": "editorTextFocus && hasPrevTabstop && inSnippetMode && !suggestWidgetVisible"
+      },
+      {
+        "key": "escape",
+        "command": "hsnips.leaveSnippet",
+        "when": "editorTextFocus && inSnippetMode && !suggestWidgetVisible"
+      }
     ],
-    "contributes": {
-        "configuration": [
-            {
-                "title": "HyperSnips",
-                "properties": {
-                    "hsnips.multiLineContext": {
-                        "type": "number",
-                        "default": 20,
-                        "description": "Number of lines matched when using multi-line regex mode."
-                    }
-                }
-            }
+    "languages": [
+      {
+        "id": "hsnips",
+        "extensions": [
+          ".hsnips"
         ],
-        "commands": [
-            {
-                "category": "HyperSnips",
-                "command": "hsnips.openSnippetsDir",
-                "title": "Open Snippets Directory"
-            },
-            {
-                "category": "HyperSnips",
-                "command": "hsnips.openSnippetFile",
-                "title": "Open Snippet File"
-            },
-            {
-                "category": "HyperSnips",
-                "command": "hsnips.reloadSnippets",
-                "title": "Reload Snippets"
-            }
-        ],
-        "keybindings": [
-            {
-                "key": "tab",
-                "command": "hsnips.nextPlaceholder",
-                "when": "editorTextFocus && hasNextTabstop && inSnippetMode && !suggestWidgetVisible"
-            },
-            {
-                "key": "shift+tab",
-                "command": "hsnips.prevPlaceholder",
-                "when": "editorTextFocus && hasPrevTabstop && inSnippetMode && !suggestWidgetVisible"
-            },
-            {
-                "key": "escape",
-                "command": "hsnips.leaveSnippet",
-                "when": "editorTextFocus && inSnippetMode && !suggestWidgetVisible"
-            }
-        ],
-        "languages": [
-            {
-                "id": "hsnips",
-                "extensions": [
-                    ".hsnips"
-                ],
-                "aliases": [
-                    "HyperSnips"
-                ]
-            }
-        ],
-        "grammars": [
-            {
-                "language": "hsnips",
-                "scopeName": "source.hsnips",
-                "path": "./syntaxes/hsnips.tmLanguage.json",
-                "embeddedLanguages": {
-                    "meta.embedded.js": "javascript"
-                }
-            }
+        "aliases": [
+          "HyperSnips"
         ]
-    },
-    "main": "./out/extension.js",
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "lint": "eslint . --ext .ts,.tsx",
-        "watch": "tsc -watch -p ./"
-    },
-    "devDependencies": {
-        "@types/node": "^15.3.0",
-        "@types/vscode": "^1.52.0",
-        "@typescript-eslint/eslint-plugin": "^4.23.0",
-        "@typescript-eslint/parser": "^4.23.0",
-        "eslint": "^7.17.0",
-        "typescript": "^4.2.4"
-    },
-    "dependencies": {
-        "open-file-explorer": "^1.0.2"
-    },
-    "extensionDependencies": [
-        "draivin.hscopes"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "hsnips",
+        "scopeName": "source.hsnips",
+        "path": "./syntaxes/hsnips.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.js": "javascript"
+        }
+      }
     ]
+  },
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.10",
+    "@types/vscode": "^1.62.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.1.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "open-file-explorer": "^1.0.2"
+  },
+  "extensionDependencies": [
+    "draivin.hscopes"
+  ]
 }
