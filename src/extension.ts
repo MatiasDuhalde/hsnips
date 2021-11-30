@@ -162,6 +162,28 @@ export function activate(context: vscode.ExtensionContext) {
     ),
   );
 
+  function isMathEnvironment(editor: vscode.TextEditor) {
+    let text = editor.document.getText(
+      new vscode.Range(new vscode.Position(0, 0), editor.selection.start),
+    );
+    const reg =
+      /(\\begin\{align\*\}[^\$]*?\\end\{align\*\})|(\\begin\{align\}[^\$]*?\\end\{align\})|(\\begin\{equation\*\}[^\$]*?\\end\{equation\*\})|(\\begin\{equation\}[^\$]*?\\end\{equation\})|(\\\[[^\$]*?\\\])|(\\\([^\$]*?\\\))|(\$\$[^\$]+\$\$)|(\$[^\$]+?\$)/g;
+    text = text.replace(reg, '');
+    if (
+      text.indexOf('$') === -1 &&
+      text.indexOf('\\(') === -1 &&
+      text.indexOf('\\[') === -1 &&
+      text.indexOf('\\begin{equation}') === -1 &&
+      text.indexOf('\\begin{equation*}') === -1 &&
+      text.indexOf('\\begin{align}') === -1 &&
+      text.indexOf('\\begin{align*}') === -1
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   // Forward all document changes so that the active snippet can update its related blocks.
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument((e) => {
@@ -194,7 +216,14 @@ export function activate(context: vscode.ExtensionContext) {
       // using !isArray, and then expand the snippet.
       if (completions && !Array.isArray(completions)) {
         let editor = vscode.window.activeTextEditor;
-        if (editor && e.document === editor.document) {
+        if (
+          editor &&
+          e.document === editor.document &&
+          ((e.document.languageId.toLowerCase() !== 'markdown' &&
+            e.document.languageId.toLowerCase() !== 'latex') ||
+            !completions.snippet.math ||
+            isMathEnvironment(editor))
+        ) {
           expandSnippet(completions, editor);
           return;
         }
@@ -237,7 +266,26 @@ export function activate(context: vscode.ExtensionContext) {
         // current context, in this case show the snippet list to the user.
         let completions = getCompletions(document, position, snippets);
         if (completions && Array.isArray(completions)) {
-          return completions.map((c) => c.toCompletionItem());
+          let editor = vscode.window.activeTextEditor;
+          let isMath = false;
+          if (editor) {
+            isMath = isMathEnvironment(editor);
+          }
+          return completions
+            .filter((c) => {
+              if (
+                editor &&
+                ((editor.document.languageId.toLowerCase() !== 'markdown' &&
+                  editor.document.languageId.toLowerCase() !== 'latex') ||
+                  !c.snippet.math ||
+                  isMath)
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            })
+            .map((c) => c.toCompletionItem());
         }
       },
     }),

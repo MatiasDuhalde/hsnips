@@ -28,6 +28,7 @@ export class HSnippet {
   inWord = false;
   wordBoundary = false;
   beginningOfLine = false;
+  math = false;
 
   constructor(
     header: IHSnippetHeader,
@@ -62,6 +63,9 @@ export class HSnippet {
     }
     if (header.flags.includes('b')) {
       this.beginningOfLine = true;
+    }
+    if (header.flags.includes('m')) {
+      this.math = true;
     }
   }
 }

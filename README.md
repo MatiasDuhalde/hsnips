@@ -2,7 +2,39 @@
 [![Rating](https://vsmarketplacebadge.apphb.com/rating-short/draivin.hsnips.svg)](https://marketplace.visualstudio.com/items?itemName=draivin.hsnips)
 [![Installs](https://vsmarketplacebadge.apphb.com/installs/draivin.hsnips.svg)](https://marketplace.visualstudio.com/items?itemName=draivin.hsnips)
 
-# HyperSnips
+# HyperSnips for Math
+
+这是一个由 OrangeX4 魔改过的 HyperSnips, 增加了**对 Markdown 和 Latex 中数学环境匹配**的功能. 并且加入了 `${VISUAL}` 语法的支持.
+
+GitHub 地址: https://github.com/OrangeX4/hsnips
+
+**使用这个插件前, 请把原来的 HyperSnips 插件删除!**
+**使用这个插件前, 请把原来的 HyperSnips 插件删除!**
+**使用这个插件前, 请把原来的 HyperSnips 插件删除!**
+
+看个小例子:
+
+``` hsnips
+snippet `((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/` "Fraction no ()" Am
+\frac{``rv = m[1]``}{$1}$0
+endsnippet
+```
+
+这是一个在数学环境中自动展开的 Snippet, 它有两个标示符 'Am', 分别代表 '自动展开' 和 '数学环境'. 用处是:
+
+```
+1/    --->    \frac{1}{}
+```
+
+相比于原来的 HyperSnips, 最大特点是, 它只会在数学环境 `$...$`, `$$...$$`, `\(...\)` 和 `\[...\]` 中自动展开!
+
+**还有 `${VISUAL}` 语法:**
+
+```
+snippet fr "frac" iAm
+\\frac{${1:${VISUAL}}}{$2}
+endsnippet
+```
 
 ![](./images/welcome.gif)
 
@@ -74,6 +106,8 @@ flags are the following:
 
 - `M`: Multi-line mode - By default, regex matches will only match content on the current line, when
   this option is enabled the last `hsnips.multiLineContext` lines will be available for matching.
+
+- `m`: Math mode
 
 \*: This flag will only affect snippets which have non-regex triggers.
 
