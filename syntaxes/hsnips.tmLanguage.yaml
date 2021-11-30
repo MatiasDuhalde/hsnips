@@ -7,7 +7,7 @@ patterns:
       0:
         name: comment
 
-  - begin: '^(snippet) ?(?:(`[^`]+`)|([\S]+))?(?: ("[^"]+"))?(?: ([AMiwb]*))?.*'
+  - begin: '^(snippet) ?(?:(`[^`]+`)|([\S]+))?(?: ("[^"]+"))?(?: ([AMiwbm]*))?.*'
     beginCaptures:
       1:
         name: keyword.control
