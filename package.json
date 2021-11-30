@@ -3,7 +3,7 @@
   "displayName": "HyperSnips",
   "description": "Snippet engine for VSCode inspired by Vim's UltiSnips",
   "icon": "images/hypersnips.png",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "draivin",
   "license": "MIT",
   "repository": {
