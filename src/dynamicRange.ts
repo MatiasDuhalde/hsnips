@@ -1,4 +1,4 @@
-import * as vscode from 'vscode';
+import { TextDocumentContentChangeEvent, Range, Position } from 'vscode';
 
 type PositionDelta = { characterDelta: number; lineDelta: number };
 
@@ -9,13 +9,13 @@ export enum GrowthType {
 }
 
 export interface IChangeInfo {
-  change: vscode.TextDocumentContentChangeEvent;
+  change: TextDocumentContentChangeEvent;
   growth: GrowthType;
 }
 
 function getRangeDelta(
-  range: vscode.Range,
-  change: vscode.TextDocumentContentChangeEvent,
+  range: Range,
+  change: TextDocumentContentChangeEvent,
   growth: GrowthType,
 ): [PositionDelta, PositionDelta] {
   const deltaStart = { characterDelta: 0, lineDelta: 0 };
@@ -59,13 +59,13 @@ function getRangeDelta(
 }
 
 export class DynamicRange {
-  range: vscode.Range;
+  range: Range;
 
-  constructor(start: vscode.Position, end: vscode.Position) {
-    this.range = new vscode.Range(start, end);
+  constructor(start: Position, end: Position) {
+    this.range = new Range(start, end);
   }
 
-  static fromRange(range: vscode.Range) {
+  static fromRange(range: Range) {
     return new DynamicRange(range.start, range.end);
   }
 
@@ -88,7 +88,7 @@ export class DynamicRange {
     this.range = this.range.with(newStart, newEnd);
   }
 
-  contains(range: vscode.Range): boolean {
+  contains(range: Range): boolean {
     return this.range.contains(range);
   }
 }
