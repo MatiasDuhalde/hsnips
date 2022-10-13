@@ -50,17 +50,17 @@
           },
           "hsnips.windows": {
             "type": "string",
-            "default": "%APPDATA%/Code/User/hsnips",
+            "default": "%APPDATA%/Code - Insiders/User/hsnips",
             "description": "Custom path for Windows."
           },
           "hsnips.linux": {
               "type": "string",
-              "default": "$HOME/.config/Code/User/hsnips",
+              "default": "$HOME/.config/Code - Insiders/User/hsnips",
               "description": "Custom path for Linux."
           },
           "hsnips.mac": {
               "type": "string",
-              "default": "$HOME/Library/Application Support/Code/User/hsnips",
+              "default": "$HOME/Library/Application Support/Code - Insiders/User/hsnips",
               "description": "Custom path for Mac OS."
           }
         }
