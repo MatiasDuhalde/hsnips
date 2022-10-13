@@ -151,9 +151,9 @@ export function getCompletions(
 
         snippetRange = new Range(new Position(position.line - lineOffset, charOffset), position);
         snippetMatches = true;
+        prefixMatches = true;
         matchGroups = Array.from(match);
         label = match[0];
-        prefixMatches = true;
       }
     }
 

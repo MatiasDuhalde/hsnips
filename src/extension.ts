@@ -7,6 +7,7 @@ import { HSnippetInstance } from './hsnippetInstance';
 import { parse } from './parser';
 import { getSnippetDir } from './utils';
 import { getCompletions, CompletionInfo } from './completion';
+import { COMPLETIONS_TRIGGERS } from './consts';
 
 const SNIPPETS_BY_LANGUAGE: Map<string, HSnippet[]> = new Map();
 const SNIPPET_STACK: HSnippetInstance[] = [];
@@ -195,7 +196,15 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      if (e.contentChanges.length === 0) {
+        return;
+      }
+
       let mainChange = e.contentChanges[0];
+
+      if (!mainChange) {
+        return;
+      }
 
       // Let's try to detect only events that come from keystrokes.
       if (mainChange.text.length !== 1) {
@@ -252,42 +261,46 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.languages.registerCompletionItemProvider([{ pattern: '**' }], {
-      provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
-        let snippets = SNIPPETS_BY_LANGUAGE.get(document.languageId.toLowerCase());
-        if (!snippets) {
-          snippets = SNIPPETS_BY_LANGUAGE.get('all');
-        }
-        if (!snippets) {
-          return;
-        }
-
-        // When getCompletions returns an array it means no auto-expansion was matched for the
-        // current context, in this case show the snippet list to the user.
-        let completions = getCompletions(document, position, snippets);
-        if (completions && Array.isArray(completions)) {
-          let editor = vscode.window.activeTextEditor;
-          let isMath = false;
-          if (editor) {
-            isMath = isMathEnvironment(editor);
+    vscode.languages.registerCompletionItemProvider(
+      [{ pattern: '**' }],
+      {
+        provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+          let snippets = SNIPPETS_BY_LANGUAGE.get(document.languageId.toLowerCase());
+          if (!snippets) {
+            snippets = SNIPPETS_BY_LANGUAGE.get('all');
           }
-          return completions
-            .filter((c) => {
-              if (
-                editor &&
-                ((editor.document.languageId.toLowerCase() !== 'markdown' &&
-                  editor.document.languageId.toLowerCase() !== 'latex') ||
-                  !c.snippet.math ||
-                  isMath)
-              ) {
-                return true;
-              } else {
-                return false;
-              }
-            })
-            .map((c) => c.toCompletionItem());
-        }
+          if (!snippets) {
+            return;
+          }
+
+          // When getCompletions returns an array it means no auto-expansion was matched for the
+          // current context, in this case show the snippet list to the user.
+          let completions = getCompletions(document, position, snippets);
+          if (completions && Array.isArray(completions)) {
+            let editor = vscode.window.activeTextEditor;
+            let isMath = false;
+            if (editor) {
+              isMath = isMathEnvironment(editor);
+            }
+            return completions
+              .filter((c) => {
+                if (
+                  editor &&
+                  ((editor.document.languageId.toLowerCase() !== 'markdown' &&
+                    editor.document.languageId.toLowerCase() !== 'latex') ||
+                    !c.snippet.math ||
+                    isMath)
+                ) {
+                  return true;
+                } else {
+                  return false;
+                }
+              })
+              .map((c) => c.toCompletionItem());
+          }
+        },
       },
-    }),
+      ...COMPLETIONS_TRIGGERS,
+    ),
   );
 }

@@ -7,7 +7,19 @@ export function lineRange(character: number, position: vscode.Position): vscode.
 }
 
 export function getSnippetDir(): string {
-  const platform = os.platform();
+  let hsnipsPath = vscode.workspace.getConfiguration('hsnips').get('hsnipsPath') as string | null;
+
+  if (hsnipsPath) {
+    let workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+
+    if (path.isAbsolute(hsnipsPath)) {
+      return hsnipsPath;
+    } else if (workspaceFolder) {
+      return path.join(workspaceFolder.uri.fsPath, hsnipsPath);
+    }
+  }
+
+  let platform = os.platform();
 
   const APPDATA = process.env.APPDATA || '';
   const HOME = process.env.HOME || '';

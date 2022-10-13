@@ -39,6 +39,14 @@
             "type": "number",
             "default": 20,
             "description": "Number of lines matched when using multi-line regex mode."
+          },
+          "hsnips.hsnipsPath": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "description": "Absolute path or relative path from the workspace folder to the folder containing the hsnips files."
           }
         }
       }
@@ -85,7 +93,8 @@
         ],
         "aliases": [
           "HyperSnips"
-        ]
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -111,7 +120,7 @@
   "devDependencies": {
     "@types/glob": "^7.2.0",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.11.10",
+    "@types/node": "^18.8.5",
     "@types/vscode": "^1.62.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",

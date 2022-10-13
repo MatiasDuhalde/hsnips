@@ -1,8 +1,8 @@
 import { HSnippet, IHSnippetHeader, GeneratorFunction, ContextFilter } from './hsnippet';
 
 const CODE_DELIMITER = '``';
-const HEADER_REGEXP = /^snippet ?(?:`([^`]+)`|(\S+))?(?: "([^"]+)")?(?: ([AMiwbm]*))?/;
 const CODE_DELIMITER_REGEX = /``(?!`)/;
+const HEADER_REGEXP = /^snippet ?(?:`([^`]+)`|(\S+))?(?: "([^"]+)")?(?: ([AMiwb]*))?/;
 
 function parseSnippetHeader(header: string): IHSnippetHeader {
   const match = HEADER_REGEXP.exec(header);
@@ -51,7 +51,7 @@ function countPlaceholders(string: string) {
 function parseSnippet(headerLine: string, lines: string[]): IHSnippetInfo {
   const header = parseSnippetHeader(headerLine);
 
-  const script = [`(t, m, w, path) => {`];
+  const script = [`(t, m, w, path, snip) => {`];
   script.push(`let rv = "";`);
   script.push(`const _result = [];`);
   script.push(`const _blockResults = [];`);
@@ -70,7 +70,7 @@ function parseSnippet(headerLine: string, lines: string[]): IHSnippetInfo {
         script.push(code.trim());
         lines.unshift(rest.join(CODE_DELIMITER));
         script.push(`_result.push({block: _blockResults.length});`);
-        script.push(`_blockResults.push(rv);`);
+        script.push(`_blockResults.push(String(rv));`);
         isCode = false;
       }
     } else {
