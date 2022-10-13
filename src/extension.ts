@@ -1,6 +1,6 @@
+import * as vscode from 'vscode';
 import { existsSync, mkdirSync, readdirSync, readFileSync } from 'fs';
 import * as path from 'path';
-import * as vscode from 'vscode';
 import openExplorer = require('open-file-explorer');
 import { HSnippet } from './hsnippet';
 import { HSnippetInstance } from './hsnippetInstance';
@@ -231,6 +231,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (!snippets) {
         return;
       }
+
       let mainChangePosition = mainChange.range.start.translate(0, mainChange.text.length);
       let completions = getCompletions(e.document, mainChangePosition, snippets);
 

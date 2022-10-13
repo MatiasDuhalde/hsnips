@@ -1,45 +1,33 @@
+import { workspace as Workspace, Range, Position } from 'vscode';
 import * as os from 'os';
-import * as path from 'path';
-import * as vscode from 'vscode';
 
-export function lineRange(character: number, position: vscode.Position): vscode.Range {
-  return new vscode.Range(position.line, character, position.line, position.character);
+export function lineRange(character: number, position: Position): Range {
+  return new Range(position.line, character, position.line, position.character);
 }
 
 export function getSnippetDir(): string {
-  let hsnipsPath = vscode.workspace.getConfiguration('hsnips').get('hsnipsPath') as string | null;
-
-  if (hsnipsPath) {
-    let workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-
-    if (path.isAbsolute(hsnipsPath)) {
-      return hsnipsPath;
-    } else if (workspaceFolder) {
-      return path.join(workspaceFolder.uri.fsPath, hsnipsPath);
-    }
-  }
-
   let platform = os.platform();
 
-  const APPDATA = process.env.APPDATA || '';
-  const HOME = process.env.HOME || '';
+  let APPDATA = process.env.APPDATA || '';
+  let HOME = process.env.HOME || '';
 
-  console.log(vscode);
+  function parsePath(path: string) {
+    return path.replace(/\%APPDATA\%/g, APPDATA).replace(/\$HOME/g, HOME);
+  }
 
   if (platform === 'win32') {
-    return path.join(APPDATA, 'Code - Insiders/User/hsnips');
+    const path: string | undefined = Workspace.getConfiguration('hsnips').get('windows');
+    return parsePath(path ? path : parsePath('%APPDATA%/Code/User/hsnips'));
   } else if (platform === 'darwin') {
-    return path.join(HOME, 'Library/Application Support/Code - Insiders/User/hsnips');
+    const path: string | undefined = Workspace.getConfiguration('hsnips').get('mac');
+    return parsePath(path ? path : parsePath('$HOME/Library/Application Support/Code/User/hsnips'));
   } else {
-    return path.join(HOME, '.config/Code - Insiders/User/hsnips');
+    const path: string | undefined = Workspace.getConfiguration('hsnips').get('linux');
+    return parsePath(path ? path : parsePath('$HOME/.config/Code/User/hsnips'));
   }
 }
 
-export function applyOffset(
-  position: vscode.Position,
-  text: string,
-  indent: number,
-): vscode.Position {
+export function applyOffset(position: Position, text: string, indent: number): Position {
   text = text.replace('\\$', '$');
   const lines = text.split('\n');
   const newLine = position.line + lines.length - 1;
@@ -54,5 +42,5 @@ export function applyOffset(
 }
 
 export function getWorkspaceUri(): string {
-  return vscode.workspace.workspaceFolders?.[0]?.uri?.toString() ?? '';
+  return Workspace.workspaceFolders?.[0]?.uri?.toString() ?? '';
 }

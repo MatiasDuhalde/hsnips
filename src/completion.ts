@@ -81,7 +81,7 @@ export function getCompletions(
   const completions = [];
   let snippetContext = { scopes: [] };
 
-  //FIXME: Plain text scope resolution should be fixed in hscopes.
+  // FIXME: Plain text scope resolution should be fixed in hscopes.
   if (document.languageId !== 'plaintext') {
     snippetContext = {
       scopes: Extensions.getExtension('draivin.hscopes')!.exports.getScopeAt(document, position)
