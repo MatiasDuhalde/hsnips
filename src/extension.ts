@@ -174,22 +174,22 @@ export function activate(context: vscode.ExtensionContext) {
       /(\\begin\{align\*\}[^\$]*?\\end\{align\*\})|(\\begin\{align\}[^\$]*?\\end\{align\})|(\\begin\{equation\*\}[^\$]*?\\end\{equation\*\})|(\\begin\{equation\}[^\$]*?\\end\{equation\})|(\\\[[^\$]*?\\\])|(\\\([^\$]*?\\\))|(\$\$[^\$]+\$\$)|(\$[^\$]+?\$)/g;
     text = text.replace(reg, '');
     if (
-      text.indexOf('$') == -1 &&
-      text.indexOf('\\(') == -1 &&
-      text.indexOf('\\[') == -1 &&
-      text.indexOf('\\begin{equation}') == -1 &&
-      text.indexOf('\\begin{equation*}') == -1 &&
-      text.indexOf('\\begin{align}') == -1 &&
-      text.indexOf('\\begin{align*}') == -1
+      text.indexOf('$') === -1 &&
+      text.indexOf('\\(') === -1 &&
+      text.indexOf('\\[') === -1 &&
+      text.indexOf('\\begin{equation}') === -1 &&
+      text.indexOf('\\begin{equation*}') === -1 &&
+      text.indexOf('\\begin{align}') === -1 &&
+      text.indexOf('\\begin{align*}') === -1
     ) {
       return false;
     } else {
-      const txt_reg = /(\\text{[^}]+})|(\\operatorname{[^}\n]+})|(\\mathrm{[^}\n]+})/g;
-      text = text.replace(txt_reg, ' ');
+      const txtReg = /(\\text{[^}]+})|(\\operatorname{[^}\n]+})|(\\mathrm{[^}\n]+})/g;
+      text = text.replace(txtReg, ' ');
       if (
-        text.indexOf('\\text{') == -1 &&
-        text.indexOf('\\operatorname{') == -1 &&
-        text.indexOf('\\mathrm{') == -1
+        text.indexOf('\\text{') === -1 &&
+        text.indexOf('\\operatorname{') === -1 &&
+        text.indexOf('\\mathrm{') === -1
       ) {
         return true;
       } else {
