@@ -6,10 +6,12 @@ import { HSnippetUtils } from './hsnippetUtils';
 
 // listen to the selection text
 let selectedText = '';
+let lastTimeOfselectedTextChanged = new Date().getTime();
 vscode.window.onDidChangeTextEditorSelection((e) => {
   const newSelectedText = e.textEditor.document.getText(e.selections[0]);
   if (newSelectedText) {
     selectedText = newSelectedText;
+    lastTimeOfselectedTextChanged = new Date().getTime();
   }
 });
 
@@ -84,7 +86,11 @@ export class HSnippetInstance {
     for (let section of sections) {
       if (typeof section === 'string') {
         // Replace ${VISUAL} with selected text
-        section = section.replace(/\${VISUAL}/g, selectedText);
+        if (new Date().getTime() - lastTimeOfselectedTextChanged < 5000) {
+          section = section.replace(/\${VISUAL}/g, selectedText);
+        } else {
+          section = section.replace(/\${VISUAL}/g, '');
+        }
       }
 
       let rawSection = section;

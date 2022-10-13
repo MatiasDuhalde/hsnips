@@ -47,6 +47,21 @@
             ],
             "default": null,
             "description": "Absolute path or relative path from the workspace folder to the folder containing the hsnips files."
+          },
+          "hsnips.windows": {
+            "type": "string",
+            "default": "%APPDATA%/Code/User/hsnips",
+            "description": "Custom path for Windows."
+          },
+          "hsnips.linux": {
+              "type": "string",
+              "default": "$HOME/.config/Code/User/hsnips",
+              "description": "Custom path for Linux."
+          },
+          "hsnips.mac": {
+              "type": "string",
+              "default": "$HOME/Library/Application Support/Code/User/hsnips",
+              "description": "Custom path for Mac OS."
           }
         }
       }
